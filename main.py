@@ -67,3 +67,19 @@ print(response['structured_response'])
 print(response['structured_response'].explanation)
 print(response['structured_response'].temperature_celsius)
 print(response['structured_response'].temperature_fahrenheit)
+print(response['structured_response'].humidity)
+
+
+
+response2 = agent.invoke({
+    'messages': [
+        {'role': 'user', 'content': 'What is the weather like?'}
+    ]}, 
+    config= config,
+    context=Context(user_id='XYZ456')
+)
+
+print(response2['structured_response'])
+print(response2['structured_response'].explanation)
+print(response2['structured_response'].temperature_celsius)
+print(response2['structured_response'].temperature_fahrenheit)
