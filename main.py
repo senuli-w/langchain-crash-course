@@ -73,7 +73,7 @@ print(response['structured_response'].humidity)
 
 response2 = agent.invoke({
     'messages': [
-        {'role': 'user', 'content': 'What is the weather like?'}
+        {'role': 'user', 'content': 'And is this usual?'}
     ]}, 
     config= config,
     context=Context(user_id='XYZ456')
