@@ -1,15 +1,40 @@
 import requests
 from dotenv import load_dotenv
 
-from langchain.chat_models import init_chat_model
+from langchain.agents import create_agent
 from langchain.messages import HumanMessage, AIMessage, SystemMessage
+from langchain.tools import tool
 
 load_dotenv()
 
-model = init_chat_model(
+@tool('get_weather', description="Get the current weather for a given location.")
+def get_weather(city: str) -> str:
+    response = requests.get(f"http://wttr.in/{city}?format=j1")
+    data = response.json()
+    
+    # Extract relevant weather info
+    current = data.get('current_condition', [{}])[0]
+    location = data.get('nearest_area', [{}])[0]
+    
+    weather_info = f"""Weather in {location.get('areaName', [{}])[0].get('value', 'Unknown')}, {location.get('country', [{}])[0].get('value', 'Unknown')}:
+- Temperature: {current.get('temp_C')}°C ({current.get('temp_F')}°F)
+- Condition: {current.get('weatherDesc', [{}])[0].get('value', 'Unknown')}
+- Humidity: {current.get('humidity')}%
+- Wind: {current.get('windspeedKmph')} km/h
+- Feels Like: {current.get('FeelsLikeC')}°C"""
+    
+    return weather_info
+
+agent = create_agent(
     model="mistral-small",
-    temperature=0.1,
+    tools=[get_weather],
+    system_prompt="You are a helpful weather assistant, who always cracks jokes and is humorous while remaining helpful."
 )
 
-for chunk in model.stream("What is Python?"):
-    print(chunk.text, end="", flush=True)
+response = agent.invoke({
+    'messages': [
+        {'role': 'user', 'content': 'What is the weather like in New York?'}
+    ]
+})
+
+print(response['messages'][-1].content)
