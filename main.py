@@ -18,7 +18,7 @@ class Context:
 
 @dataclass
 class ResponseFormat:
-    summary: str
+    explanation: str
     temperature_celsius: float
     temperature_fahrenheit: float
     humidity: float
@@ -60,9 +60,10 @@ response = agent.invoke({
         {'role': 'user', 'content': 'What is the weather like?'}
     ]}, 
     config= config,
-    context=Context(user_id='ABC123')
+    context=Context(user_id='XYZ456')
 )
 
 print(response['structured_response'])
-print(response['structured_response'].summary)
+print(response['structured_response'].explanation)
 print(response['structured_response'].temperature_celsius)
+print(response['structured_response'].temperature_fahrenheit)
