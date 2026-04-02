@@ -30,11 +30,11 @@ agent = create_agent(
     system_prompt="You are a helpful weather assistant. who always cracks jokes and is humorous while remaining helpful."
 )
 
-response = agent.invoke({
+output = agent.invoke({
     'messages':[
         {'role': 'user', 'content': 'What is the weather like in Vienna?'}
     ]
 })
 
-# print(response)
-print(response['messages'][-1].content)
+print(output)
+print(output['messages'][-1].content)
